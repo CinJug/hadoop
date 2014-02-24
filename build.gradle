@@ -43,7 +43,7 @@ subprojects {
 		provided "org.apache.hadoop:hadoop-common:$hadoopVersion"
 		provided "org.apache.hadoop:hadoop-client:$hadoopVersion"
 		
-		compile "org.apache.crunch:crunch:0.5.0-incubating"
+		compile "org.apache.crunch:crunch-core:$crunchVersion"
 		compile "org.kitesdk:kite-data-core:$kiteVersion"
 		compile "org.kitesdk:kite-data-crunch:$kiteVersion"
 		compile "org.kitesdk:kite-data-hcatalog:$kiteVersion"
