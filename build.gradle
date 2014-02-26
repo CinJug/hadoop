@@ -55,6 +55,5 @@ subprojects {
 }
 
 task createWrapper(type: Wrapper) {
-	gradleVersion = '1.7'
-	distributionUrl "http://artifactory.kroger.com/artifactory/gradle-distributions-cache/gradle-${gradleVersion}-bin.zip"
+	gradleVersion = '1.11'
 }

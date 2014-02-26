@@ -1,6 +1,9 @@
 echo "Fix IPs"
 exit 0
 
+export JAVA_HOME=/usr/jdk64/jdk1.6.0_31
+echo "export JAVA_HOME=/usr/jdk64/jdk1.6.0_31" >> ~/.bashrc
+
 touch ~/.ssh/known_hosts
 if grep "master.hadoop-cinjug" ~/.ssh/known_hosts > /dev/null
 then
