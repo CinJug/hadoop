@@ -6,7 +6,6 @@ import org.apache.crunch.FilterFn;
 
 import com.google.common.collect.ImmutableSet;
 
-
 /**
  * A filter that removes known stop words.
  */

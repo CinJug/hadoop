@@ -1,11 +1,7 @@
 package cinjug;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -39,16 +35,6 @@ public class Driver  extends Configured implements Tool {
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
  
 		job.setJarByClass(Driver.class);
-
-		List<String> other_args = new ArrayList<String>();
-		for (int i=0; i < args.length; ++i) {
-			if ("-skip".equals(args[i])) {
-				DistributedCache.addCacheFile(new Path(args[++i]).toUri(), getConf());
-				getConf().setBoolean("wordcount.skip.patterns", true);
-			} else {
-				other_args.add(args[i]);
-			}
-		}
 
 		job.submit();
 		return job.waitForCompletion(true) ? 0 : 1;
