@@ -1,6 +1,3 @@
-echo "Fix IPs"
-exit 0
-
 export JAVA_HOME=/usr/jdk64/jdk1.6.0_31
 echo "export JAVA_HOME=/usr/jdk64/jdk1.6.0_31" >> ~/.bashrc
 
@@ -18,7 +15,7 @@ sudo chown hadoop:hadoop /home/hadoop/.ssh/id_rsa*
 
 cur_ip=`ifconfig eth0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'`
 
-sudo bash -c "echo $'domain hadoop-cinjug\nsearch hadoop-cinjug\nnameserver 192.168.x.x' > /etc/resolv.conf"
+sudo bash -c "echo $'domain hadoop-cinjug\nsearch hadoop-cinjug\nnameserver 192.168.1.101' > /etc/resolv.conf"
 
 D_NAME=`ssh bind_serv@master.hadoop-cinjug $cur_ip`
 sudo hostname $D_NAME.hadoop-cinjug
