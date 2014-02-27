@@ -12,6 +12,11 @@ import com.google.common.collect.ImmutableSet;
  */
 public class StopWordFilter extends FilterFn<String> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private static final Set<String> STOP_WORDS = ImmutableSet.copyOf(new String[] {
 		"a", "and", "are", "as", "at", "be", "but", "by",
 		"for", "if", "in", "into", "is", "it",

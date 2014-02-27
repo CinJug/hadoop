@@ -1,40 +1,61 @@
-import org.apache.hadoop.mapreduce.Job;
+package cinjug;
 
-public class Driver {
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.filecache.DistributedCache;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
+
+public class Driver  extends Configured implements Tool {
 
 	public int run(String[] args) throws Exception {
-		JobConf conf = new JobConf(getConf(), WordCount.class);
-		conf.setJobName("wordcount");
-
-		conf.setOutputKeyClass(Text.class);
-		conf.setOutputValueClass(IntWritable.class);
-
-		conf.setMapperClass(WordMapper.class);
-		conf.setCombinerClass(WordReducer.class);
-		conf.setReducerClass(WordReducer.class);
-
-		conf.setInputFormat(TextInputFormat.class);
-		conf.setOutputFormat(TextOutputFormat.class);
+		if (args.length != 2) {
+			System.err.println("Usage: WordCount <input dir> <output dir>"); 
+			System.exit(-1); 
+		} 
+		
+		Job job = Job.getInstance(getConf());
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(IntWritable.class);
+ 
+		job.setMapperClass(WordMapper.class); 
+		job.setReducerClass(WordReducer.class);  
+ 
+		job.setInputFormatClass(TextInputFormat.class);
+		job.setOutputFormatClass(TextOutputFormat.class);
+ 
+		FileInputFormat.setInputPaths(job, new Path(args[0]));
+		FileOutputFormat.setOutputPath(job, new Path(args[1]));
+ 
+		job.setJarByClass(Driver.class);
 
 		List<String> other_args = new ArrayList<String>();
 		for (int i=0; i < args.length; ++i) {
 			if ("-skip".equals(args[i])) {
-				DistributedCache.addCacheFile(new Path(args[++i]).toUri(), conf);
-				conf.setBoolean("wordcount.skip.patterns", true);
+				DistributedCache.addCacheFile(new Path(args[++i]).toUri(), getConf());
+				getConf().setBoolean("wordcount.skip.patterns", true);
 			} else {
 				other_args.add(args[i]);
 			}
 		}
 
-		FileInputFormat.setInputPaths(conf, new Path(other_args.get(0)));
-		FileOutputFormat.setOutputPath(conf, new Path(other_args.get(1)));
-
-		JobClient.runJob(conf);
-		return 0;
+		job.submit();
+		return job.waitForCompletion(true) ? 0 : 1;
 	}
 
 	public static void main(String[] args) throws Exception {
-		int res = ToolRunner.run(new Configuration(), new WordCount(), args);
+		int res = ToolRunner.run(new Configuration(), new Driver(), args);
 		System.exit(res);
 	}
    

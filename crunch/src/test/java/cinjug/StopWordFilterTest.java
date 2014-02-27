@@ -5,7 +5,6 @@ import static org.hamcrest.CoreMatchers.is;
 import org.apache.crunch.FilterFn;
 import org.junit.Test;
 
-
 public class StopWordFilterTest {
 
 	@Test

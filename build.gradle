@@ -11,7 +11,6 @@ subprojects {
 	sourceSets {
 		main {
 			compileClasspath += configurations.provided
-			resources.srcDir 'src/main/hive'
 		}
 		
 		test {
@@ -19,11 +18,13 @@ subprojects {
 		}
 	}
 
+	eclipse.classpath.plusConfigurations += configurations.provided
+
 	// We want a jar-with-dependencies so that all of our library classes show up when running
 	// a hadoop job.
 	// The other alternative is to list all of your needed libraries in -libjars
 	jar {
-		//from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+		from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
 	}
 	
 	repositories {
@@ -39,7 +40,6 @@ subprojects {
 		compile "com.google.code.gson:gson:2.2.4"
 		
 		provided "commons-configuration:commons-configuration:1.6"
-		provided "org.apache.hadoop:hadoop-core:$mapRedVersion"
 		provided "org.apache.hadoop:hadoop-common:$hadoopVersion"
 		provided "org.apache.hadoop:hadoop-client:$hadoopVersion"
 		
@@ -50,7 +50,7 @@ subprojects {
 		
 		testCompile "org.mockito:mockito-all:1.9.5"
 		testCompile "junit:junit:4.11"
-		testCompile "org.apache.mrunit:mrunit:1.0.0"
+		testCompile "org.apache.mrunit:mrunit:1.0.0:hadoop2"
 	}
 }
 
